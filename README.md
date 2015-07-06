@@ -16,7 +16,7 @@ Mongo CRUD basics on node js enviroment
   -$ git clone https://github.com/jayrore/mongoCRUD.git
 
 5. install modules 
-  - npm install
+  - npm install nodemon -g && npm install
 
 6. run server
   - DEBUG=mongo-crud npm start
