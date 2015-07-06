@@ -4,11 +4,32 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var MongoClient = require('mongodb').MongoClient;
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
 
 var app = express();
+
+/**
+  Mongo client implementation
+*/
+var mongo = {
+  db: 'workshop',
+  col: 'basic',
+  host: 'localhost',
+  port: '27017'
+};
+
+var url = 'mongodb://'+mongo.host+':'+mongo.port+'/'+mongo.db;
+
+MongoClient.connect(url, function(err, db) {
+  assert.equal(null, err);
+  console.log("Connected correctly to server");
+
+  db.close();
+});
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
