@@ -12,3 +12,11 @@ Mongo CRUD basics on node js enviroment
   - $ brew install mongodb
   - $ mongo -version
 
+4. clone this repository
+  -$ git clone https://github.com/jayrore/mongoCRUD.git
+
+5. install modules 
+  - npm install
+
+6. run server
+  - DEBUG=mongo-crud npm start
