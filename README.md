@@ -20,3 +20,7 @@ Mongo CRUD basics on node js enviroment
 
 6. run server
   - DEBUG=mongo-crud npm start
+
+7. run mongo daemon
+  - $ mongod 
+  - $ mongod [-dbpath /directory/path/ ] [-port 27017]
