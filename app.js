@@ -24,11 +24,11 @@ var mongo = {
 var url = 'mongodb://'+mongo.host+':'+mongo.port+'/'+mongo.db;
 
 MongoClient.connect(url, function(err, db) {
-  assert.equal(null, err);
   console.log("Connected correctly to server");
 
   db.close();
 });
+
 
 
 // view engine setup
