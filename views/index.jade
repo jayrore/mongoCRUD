@@ -2,4 +2,32 @@ extends layout
 
 block content
   h1= title
-  p Welcome to #{title}
+  p Mongo Grills
+  .row
+    .col-md-3
+      h3 add new customer
+      form(id="insert", method="post", action="users/insert")
+        .form-group
+          input(name="firstName" placeholder="first name")
+        .form-group
+          input(name="lastName" placeholder="last name")
+        .form-group
+          input(type="checkbox", name="carnes" value="diezmillo")
+          |diezmillo
+        .form-group
+          input(type="checkbox", name="carnes" value="top sirloin")
+          |top sirloin
+        .form-group
+          input(type="submit", value="insert")
+    .col-md-9
+      h3 customer list (Find all)
+      ul
+        each val in list.sort()
+          li= val.firstName
+
+
+    .col-md-6
+      h3 find
+
+    .col-md-6
+      h3 delete
