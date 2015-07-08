@@ -3,6 +3,7 @@ var router = express.Router();
 var MongoDB = require('mongodb');
 var MongoClient = MongoDB.MongoClient;
 var utils = require('../utils.js');
+var _ = require('underscore');
 
 /**
   Mongo client implementation
@@ -33,10 +34,13 @@ router.post('/insert', function (req, res) {
         }
     });
     
+    body.meats = JSON.parse(body.meats);
+
     if(!Array.isArray(body.meats)){
       body.meats = [body.meats]; 
     }
 
+    //body.drinks = JSON.parse(body.drinks);
     if(!Array.isArray(body.drinks)){
       body.drinks = [body.drinks]; 
     }
@@ -79,6 +83,7 @@ router.get('/look/:_id', function (req, res, next) {
             _id: new MongoDB.ObjectID(req.params._id)
         }).toArray(function (err, docs) {
             req.invitee = docs[0];
+            console.log(req.invitee.meats[0].name)
             next();
         });
     });
@@ -93,7 +98,8 @@ router.get('/look/:_id', function (req, res, next) {
         host: host,
         invitee: req.invitee,
         meats: meats,
-        drinks: drinks
+        drinks: drinks,
+        _:_
     });
 });
 
@@ -105,6 +111,20 @@ router.post('/update', function (req, res, next) {
 
     MongoClient.connect(url, function (err, db) {
         var collection = db.collection(mongo.col);
+          console.info(body.meats);      
+
+
+        if( typeof body.meats  == "string"){
+          body.meats = [JSON.parse(body.meats)];
+        }
+        else if(!Array.isArray(body.meats)){
+          body.meats = [body.meats]; 
+        }else{
+
+          body.meats = body.meats.map(function(meat){
+          	return JSON.parse(meat);
+          });
+        };
 
         collection.update({
             _id: new MongoDB.ObjectID(body._id)
@@ -122,6 +142,7 @@ router.post('/update', function (req, res, next) {
             console.log(res);
             next();
         });
+
 
     });
 }, function (req, res) {

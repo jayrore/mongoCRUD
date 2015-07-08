@@ -22,16 +22,15 @@ block content
       .col-md-4
           h4 Choose yor meats
           if invitee.meats
-            each meat in meats
+            each meat, index in meats
               .form-group
-                input(type="checkbox", name="meats" value = meat checked=((invitee.meats.indexOf(meat) > -1) ? "checked" : undefined))
-                = meat
+                input(type="checkbox", name="meats" value = JSON.stringify(meat) checked=(  !!_.findWhere(invitee.meats, meat) ? "checked" : undefined))
+                = meat.name
           else
             each meat in meats
               .form-group
                 input(type="checkbox", name="meats" value = meat)
-                = meat
-                  
+                = meat      
       .col-md-4
           h4 Choose your drinks
           if invitee.drinks

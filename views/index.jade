@@ -17,8 +17,8 @@ block content
         h4 Choose yor meats
         each meat in meats
           .form-group
-            input(type="checkbox", name="meats" value = meat)
-            =meat
+            input(type="checkbox", name="meats" value = JSON.stringify(meat))
+            =" $"+meat.price+"kg - "+meat.name
         hr  
 
         h4 Wanna Drink?
@@ -40,10 +40,13 @@ block content
     .col-md-3
       .row
         .col-md-12
+          h3 Approximate cooperation
+          h2= " $"+coopPerPerson 
+        .col-md-12
           h3 Most voted meats 
           ol 
             each mvMeat in mvMeats
-              li= mvMeat._id +" : "+ mvMeat.votes
+              li= " $"+mvMeat._id.price +" - "+mvMeat._id.name +" : "+ mvMeat.votes
         .col-md-12
           h3 Most voted drinks 
           ol 
