@@ -1,0 +1,46 @@
+extends layout
+
+block content
+  .row
+    .col-md-offset-3.col-md-6
+      h1= title
+      p= invitee.firstName +" "+ invitee.lastName
+  .row
+    .col-md-12
+    form(id="insert", method="post", action= host+"/users/update" )
+      input(name="_id", type="hidden" ,value= invitee._id)
+      .col-md-4
+        h4 Invitee information
+        .form-group
+          input(name="firstName" placeholder="first name" value = invitee.firstName )
+        .form-group
+          input(name="lastName"  placeholder="last name" value = invitee.lastName)
+        .row
+          .col-md-4
+            .form-group
+              input(type="submit", value="update")
+      .col-md-4
+          h4 Choose yor meats
+          if invitee.meats
+            each meat in meats
+              .form-group
+                input(type="checkbox", name="meats" value = meat checked=((invitee.meats.indexOf(meat) > -1) ? "checked" : undefined))
+                = meat
+          else
+            each meat in meats
+              .form-group
+                input(type="checkbox", name="meats" value = meat)
+                = meat
+                  
+      .col-md-4
+          h4 Choose your drinks
+          if invitee.drinks
+            each drink in drinks
+              .form-group
+                input(type="checkbox", name="drinks" value = drink checked=((invitee.drinks.indexOf(drink) > -1) ? "checked" : undefined))
+                = drink
+          else
+            each drink in drinks
+              .form-group
+                input(type="checkbox", name="drinks" value = drink)
+                = drink

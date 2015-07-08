@@ -1,33 +1,51 @@
 extends layout
 
 block content
-  h1= title
-  p Mongo Grills
+  .row
+    .col-md-offset-3.col-md-6
+      h1= title
+      p Medium Rare Class
   .row
     .col-md-3
-      h3 add new customer
+      h3 Register here!!
       form(id="insert", method="post", action="users/insert")
         .form-group
           input(name="firstName" placeholder="first name")
         .form-group
           input(name="lastName" placeholder="last name")
-        .form-group
-          input(type="checkbox", name="carnes" value="diezmillo")
-          |diezmillo
-        .form-group
-          input(type="checkbox", name="carnes" value="top sirloin")
-          |top sirloin
+        hr
+        h4 Choose yor meats
+        each meat in meats
+          .form-group
+            input(type="checkbox", name="meats" value = meat)
+            =meat
+        hr  
+
+        h4 Wanna Drink?
+        each drink in drinks
+          .form-group
+            input(type="checkbox", name="drinks" value = drink)
+            =drink
+        hr 
+
         .form-group
           input(type="submit", value="insert")
-    .col-md-9
-      h3 customer list (Find all)
-      ul
-        each val in list.sort()
-          li= val.firstName
-
-
     .col-md-6
-      h3 find
-
-    .col-md-6
-      h3 delete
+      h3 Invitee list (Find all)
+      ol
+        each val in list
+          li
+            a(href="users/delete/"+val._id, target="_self") x 
+            a(href="users/look/"+val._id, target="_self")=val.firstName +" "+ val.lastName
+    .col-md-3
+      .row
+        .col-md-12
+          h3 Most voted meats 
+          ol 
+            each mvMeat in mvMeats
+              li= mvMeat._id +" : "+ mvMeat.votes
+        .col-md-12
+          h3 Most voted drinks 
+          ol 
+            each mvDrink in mvDrinks
+              li= mvDrink._id +" : "+ mvDrink.votes

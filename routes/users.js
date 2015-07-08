@@ -1,47 +1,133 @@
 var express = require('express');
 var router = express.Router();
-var MongoClient = require('mongodb').MongoClient;
+var MongoDB = require('mongodb');
+var MongoClient = MongoDB.MongoClient;
+var utils = require('../utils.js');
 
 /**
   Mongo client implementation
 */
 var mongo = {
-  db: 'workshop',
-  col: 'basic',
-  host: 'localhost',
-  port: '27017'
+    db: 'workshop',
+    col: 'basic',
+    host: 'localhost',
+    port: '27017'
 };
 
-var url = 'mongodb://'+mongo.host+':'+mongo.port+'/'+mongo.db;
+var url = 'mongodb://' + mongo.host + ':' + mongo.port + '/' + mongo.db;
 
 /* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
+router.get('/', function (req, res, next) {
+    res.send('respond with a resource');
 });
 
+// INSERT 
+router.post('/insert', function (req, res) {
 
-router.post('/insert', function(req, res){
+    var body = req.body;
 
-	var body = req.body;
-	console.log(body);
-	// new user logic
-	Object.keys(body).forEach(function(prop) {
-		if(!body[prop]){
-			delete body[prop];	
-		}
-	});
+    // new user logic
+    Object.keys(body).forEach(function (prop) {
+        if (!body[prop]) {
+            delete body[prop];
+        }
+    });
+    
+    if(!Array.isArray(body.meats)){
+      body.meats = [body.meats]; 
+    }
 
-	MongoClient.connect(url, function(err, db) {
-  		console.log("Connected correctly to server");
-  		
-  		db.collection(mongo.col).insert(body, function(err, res){
-  			console.log(res.ops);
-  			db.close();
-  		})
-	});
+    if(!Array.isArray(body.drinks)){
+      body.drinks = [body.drinks]; 
+    }
 
-	res.redirect('/');
-})
+
+    MongoClient.connect(url, function (err, db) {
+
+        db.collection(mongo.col).insert(body, function (err, res) {
+            console.log(res.ops);
+            db.close();
+        })
+    });
+
+    res.redirect('/');
+});
+
+// DELETE 
+router.get('/delete/:_id', function (req, res) {
+
+    MongoClient.connect(url, function (err, db) {
+        var collection = db.collection(mongo.col);
+
+        collection.remove({
+            _id: new MongoDB.ObjectID(req.params._id)
+        }, function (err, res) {
+            console.log(res.result)
+        });
+
+    });
+
+    res.redirect('/');
+});
+
+// Get by id
+router.get('/look/:_id', function (req, res, next) {
+    MongoClient.connect(url, function (err, db) {
+
+        var collection = db.collection(mongo.col);
+        collection.find({
+            _id: new MongoDB.ObjectID(req.params._id)
+        }).toArray(function (err, docs) {
+            req.invitee = docs[0];
+            next();
+        });
+    });
+}, function (req, res) {
+    var host = req.protocol + '://' + req.get('host');
+    var meats = utils.meats;
+    var drinks = utils.drinks;
+
+    // render page tu update
+    res.render('look', {
+        title: 'MongoDB Grill',
+        host: host,
+        invitee: req.invitee,
+        meats: meats,
+        drinks: drinks
+    });
+});
+
+// UPDATE
+router.post('/update', function (req, res, next) {
+    var host = req.protocol + '://' + req.get('host');
+    var body = req.body;
+    console.info('to update',body);
+
+    MongoClient.connect(url, function (err, db) {
+        var collection = db.collection(mongo.col);
+
+        collection.update({
+            _id: new MongoDB.ObjectID(body._id)
+        }, {
+        	$set:{
+        	  meats: body.meats,
+        	  drinks: body.drinks,
+        	  firstName: body.firstName,
+        	  lastName: body.lastName,
+        	},
+            $inc: {
+                qtyUpdates: 1
+            }
+        }, function (err, res) {
+            console.log(res);
+            next();
+        });
+
+    });
+}, function (req, res) {
+
+    res.redirect('/');
+});
 
 
 
