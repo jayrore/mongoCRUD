@@ -76,7 +76,8 @@ router.get('/', function (req, res, next) {
     },
     // approximate Cooperation
     function (req, res, next) {
-        var meatCoop = req.mvMeats[0]._id.price / 3;
+
+        var meatCoop = req.mvMeats[0]? req.mvMeats[0]._id.price / 3 : 0;
 
         //coop until now
         req.coopPerPerson = meatCoop;
