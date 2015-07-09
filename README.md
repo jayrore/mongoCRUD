@@ -18,9 +18,9 @@ Mongo CRUD basics on node js enviroment
 5. install nodemon as global and dependencies 
   - npm install nodemon -g && npm install
 
-6. run server
-  - DEBUG=mongo-crud npm start
-
-7. run mongo daemon
+6. run mongo daemon
   - $ mongod 
   - $ mongod [-dbpath /directory/path/ ] [-port 27017]
+  
+7. run server
+  - DEBUG=mongo-crud npm start
