@@ -50,37 +50,23 @@ router.get('/', function (req, res, next) {
 
         });
     },
-    // middleware most voted Drinks
-    function (req, res, next) {
-        MongoClient.connect(url, function (err, db) {
-            db.collection(mongo.col).aggregate([{
-                $unwind: '$drinks'
-            }, {
-                $group: {
-                    _id: '$drinks',
-                    votes: {
-                        $sum: 1
-                    }
-                }
-            }, {
-                $sort: {
-                    votes: -1
-                }
-            }]).toArray(function (err, docs) {
-                req.mvDrinks = docs;
-                console.log(docs);
-                db.close();
-                next();
-            });
-        });
+    // middleware most voted drinks
+    function (req, res, next){
+      next();
     },
     // approximate Cooperation
     function (req, res, next) {
 
-        var meatCoop = req.mvMeats[0]? req.mvMeats[0]._id.price / 3 : 0;
+        var meatCoop = req.mvMeats[0] ? req.mvMeats[0]._id.price / 3 : 0;
 
         //coop until now
         req.coopPerPerson = meatCoop;
+        next();
+    },
+    // Total budget
+    function (req, res, next) {
+        //TODO : render total budget
+        req.totalBudget = req.coopPerPerson * req.list.length;
         next();
     },
     function (req, res) {
@@ -91,9 +77,7 @@ router.get('/', function (req, res, next) {
             title: 'MongoDB Grill',
             list: req.list,
             meats: meats,
-            drinks: drinks,
             mvMeats: req.mvMeats,
-            mvDrinks: req.mvDrinks,
             coopPerPerson: req.coopPerPerson
         });
     });

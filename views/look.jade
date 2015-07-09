@@ -31,15 +31,3 @@ block content
               .form-group
                 input(type="checkbox", name="meats" value = meat)
                 = meat      
-      .col-md-4
-          h4 Choose your drinks
-          if invitee.drinks
-            each drink in drinks
-              .form-group
-                input(type="checkbox", name="drinks" value = drink checked=((invitee.drinks.indexOf(drink) > -1) ? "checked" : undefined))
-                = drink
-          else
-            each drink in drinks
-              .form-group
-                input(type="checkbox", name="drinks" value = drink)
-                = drink

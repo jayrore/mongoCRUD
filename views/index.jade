@@ -10,45 +10,32 @@ block content
       h3 Register here!!
       form(id="insert", method="post", action="users/insert")
         .form-group
-          input(name="firstName" placeholder="first name")
+          input(name="firstName" placeholder="first name" required)
         .form-group
-          input(name="lastName" placeholder="last name")
+          input(name="lastName" placeholder="last name" required)
         hr
         h4 Choose yor meats
         each meat in meats
           .form-group
-            input(type="checkbox", name="meats" value = JSON.stringify(meat))
+            input(type="checkbox", name="meats" value = JSON.stringify(meat) )
             =" $"+meat.price+"kg - "+meat.name
-        hr  
-
-        h4 Wanna Drink?
-        each drink in drinks
-          .form-group
-            input(type="checkbox", name="drinks" value = drink)
-            =drink
-        hr 
-
         .form-group
           input(type="submit", value="insert")
-    .col-md-6
+    .col-md-4
       h3 Invitee list (Find all)
       ol
         each val in list
           li
             a(href="users/delete/"+val._id, target="_self") x 
-            a(href="users/look/"+val._id, target="_self")=val.firstName +" "+ val.lastName
+            a(href="users/look/"+val._id, target="_self")
+              b= val.firstName +" "+ val.lastName
     .col-md-3
       .row
         .col-md-12
-          h3 Approximate cooperation
+          h4 Approximate cooperation per invitee
           h2= " $"+coopPerPerson 
         .col-md-12
           h3 Most voted meats 
           ol 
             each mvMeat in mvMeats
               li= " $"+mvMeat._id.price +" - "+mvMeat._id.name +" : "+ mvMeat.votes
-        .col-md-12
-          h3 Most voted drinks 
-          ol 
-            each mvDrink in mvDrinks
-              li= mvDrink._id +" : "+ mvDrink.votes
