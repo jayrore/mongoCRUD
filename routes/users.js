@@ -33,13 +33,17 @@ router.post('/insert', function (req, res) {
             delete body[prop];
         }
     });
-    
-    body.meats = JSON.parse(body.meats);
+   
 
     if(!Array.isArray(body.meats)){
-      body.meats = [body.meats]; 
-    }
+      body.meats = [JSON.parse(body.meats)]; 
+    }else{
+      body.meats = body.meats.map(function(meat){
+      	return JSON.parse(meat);
+      });
 
+    }
+      console.log("meats",body.meats);
     //body.drinks = JSON.parse(body.drinks);
     if(!Array.isArray(body.drinks)){
       body.drinks = [body.drinks]; 
@@ -110,9 +114,7 @@ router.post('/update', function (req, res, next) {
     console.info('to update',body);
 
     MongoClient.connect(url, function (err, db) {
-        var collection = db.collection(mongo.col);
-          console.info(body.meats);      
-
+        var collection = db.collection(mongo.col);  
 
         if( typeof body.meats  == "string"){
           body.meats = [JSON.parse(body.meats)];
@@ -120,7 +122,6 @@ router.post('/update', function (req, res, next) {
         else if(!Array.isArray(body.meats)){
           body.meats = [body.meats]; 
         }else{
-
           body.meats = body.meats.map(function(meat){
           	return JSON.parse(meat);
           });
